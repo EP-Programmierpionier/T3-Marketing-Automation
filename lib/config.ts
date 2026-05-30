@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import yaml from "js-yaml";
-import type { Queue, StageKey } from "./types.ts";
+import type { NextActionKind, Queue, StageKey } from "./types.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CONFIG_DIR = join(here, "..", "config");
@@ -64,10 +64,19 @@ export interface PlanConfig {
   fte_gesamt: { ist_2025: number; h1_2026: number; h2_2026: number };
 }
 
+export interface BrevoMappingConfig {
+  pipeline_name: string;
+  pipeline_id: string;
+  stage_label_to_key: Record<string, StageKey>;
+  attributes: Record<string, string>;
+  task_type_to_action: Record<string, NextActionKind>;
+}
+
 let _stages: StagesConfig | undefined;
 let _prio: PrioritizationConfig | undefined;
 let _funnel: FunnelSollConfig | undefined;
 let _plan: PlanConfig | undefined;
+let _brevo: BrevoMappingConfig | undefined;
 
 export function getStagesConfig(): StagesConfig {
   return (_stages ??= loadYaml<StagesConfig>("stages.yaml"));
@@ -83,6 +92,10 @@ export function getFunnelSollConfig(): FunnelSollConfig {
 
 export function getPlanConfig(): PlanConfig {
   return (_plan ??= loadYaml<PlanConfig>("plan-2026.yaml"));
+}
+
+export function getBrevoMappingConfig(): BrevoMappingConfig {
+  return (_brevo ??= loadYaml<BrevoMappingConfig>("brevo-mapping.yaml"));
 }
 
 /** Lookup-Map StageKey -> StageDef. */

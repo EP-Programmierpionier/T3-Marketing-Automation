@@ -23,6 +23,8 @@ export interface DeliveryResult {
   markdown: string;
 }
 
+export type DeliveryChannel = "file" | "teams";
+
 export function deliverToFiles(view: CockpitView): DeliveryResult {
   mkdirSync(OUT_DIR, { recursive: true });
   const markdown = renderMarkdown(view);
@@ -36,4 +38,43 @@ export function deliverToFiles(view: CockpitView): DeliveryResult {
   writeFileSync(cardPath, JSON.stringify(card, null, 2), "utf8");
 
   return { markdownPath, cardPath, markdown };
+}
+
+/**
+ * Echte Teams-Zustellung via Incoming Webhook (Power Automate "Workflows" oder
+ * O365-Connector). URL aus ENV TEAMS_WEBHOOK_URL. Postet die Adaptive Card im
+ * von Teams erwarteten Attachment-Format.
+ *
+ * Hintergrund: Der in dieser Umgebung verbundene M365-MCP bietet nur Lese-Tools
+ * (kein "Teams-Nachricht senden"); ein Incoming Webhook ist der robusteste,
+ * tool-unabhaengige Zustellweg. Alternativ kann spaeter Graph `chatMessage`
+ * (Application-Permission) hier eingehaengt werden.
+ *
+ * @returns true wenn zugestellt, false wenn kein Webhook konfiguriert ist.
+ */
+export async function deliverToTeams(
+  view: CockpitView,
+  webhookUrl = process.env.TEAMS_WEBHOOK_URL,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  if (!webhookUrl) return false;
+  const card = renderAdaptiveCard(view);
+  const payload = {
+    type: "message",
+    attachments: [
+      {
+        contentType: "application/vnd.microsoft.card.adaptive",
+        content: card,
+      },
+    ],
+  };
+  const res = await fetchImpl(webhookUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    throw new Error(`Teams-Webhook ${res.status} ${res.statusText}`);
+  }
+  return true;
 }

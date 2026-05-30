@@ -6,6 +6,13 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import type { Deal } from "../../lib/types.ts";
+import { getBrevoMappingConfig } from "../../lib/config.ts";
+import { BrevoClient } from "./rest.ts";
+import {
+  mapBrevoDeal,
+  summarizeTasks,
+  type BrevoTask,
+} from "./mapping.ts";
 
 /** Quelle der Wahrheit fuer Deals. Owner-Filter (z.B. nur Daniel/BY) optional. */
 export interface DealsSource {
@@ -34,21 +41,61 @@ export class MockBrevoAdapter implements DealsSource {
 }
 
 /**
- * Phase 1: echter Brevo-REST-Client. Bewusst noch nicht implementiert -
- * benoetigt API-Key + AVV + exakte Stage-IDs/Custom-Field-Namen (offener
- * Punkt 12.2). Das Interface ist identisch, daher reines Einhaengen spaeter.
+ * Phase 1: echter Brevo-REST-Adapter. Code-complete; aktivierbar via
+ * DEALS_SOURCE=brevo + BREVO_API_KEY. Stage-Labels und Custom-Field-Namen
+ * kommen aus config/brevo-mapping.yaml (offener Punkt 12.2 -> dort bestaetigen).
+ *
+ * Ablauf: Pipeline-Stages laden (ID->Label) -> Deals laden -> Tasks je Deal
+ * verdichten (Faelligkeit/Next-Action/last_activity) -> ersten verknuepften
+ * Kontakt laden (E-Mail/Name/Funktion) -> auf unser Deal-Modell mappen.
  */
 export class RestBrevoAdapter implements DealsSource {
   readonly name = "brevo";
-  constructor(private readonly apiKey: string) {}
+  private readonly client: BrevoClient;
+  constructor(apiKey: string, client?: BrevoClient) {
+    this.client = client ?? new BrevoClient(apiKey);
+  }
 
-  async fetchDeals(_filter?: DealsFilter): Promise<Deal[]> {
-    if (!this.apiKey) throw new Error("BREVO_API_KEY fehlt.");
-    throw new Error(
-      "RestBrevoAdapter ist noch nicht implementiert (Phase 1). " +
-        "Benoetigt: Brevo-AVV, exakte Deal-Stage-IDs und Custom-Field-Namen " +
-        "(revenue_eur, produktlinie, bundesland, persona) - offener Punkt 12.2.",
-    );
+  async fetchDeals(filter?: DealsFilter): Promise<Deal[]> {
+    const cfg = getBrevoMappingConfig();
+
+    // 1) Pipeline + Stage-ID -> Label.
+    const pipelines = await this.client.getPipelines();
+    const pipeline =
+      pipelines.find((p) => (cfg.pipeline_id && p.pipeline === cfg.pipeline_id)) ??
+      pipelines.find((p) => p.pipeline_name === cfg.pipeline_name) ??
+      pipelines[0];
+    const stageIdToLabel = new Map<string, string>();
+    for (const s of pipeline?.stages ?? []) stageIdToLabel.set(s.id, s.name);
+
+    // 2) Tasks einmal laden und je Deal gruppieren.
+    const tasks = await this.client.listTasks();
+    const tasksByDeal = new Map<string, BrevoTask[]>();
+    for (const t of tasks) {
+      for (const dealId of t.dealsIds ?? []) {
+        const arr = tasksByDeal.get(dealId) ?? [];
+        arr.push(t);
+        tasksByDeal.set(dealId, arr);
+      }
+    }
+
+    // 3) Deals laden und mappen.
+    const rawDeals = await this.client.listDeals();
+    const deals: Deal[] = [];
+    for (const raw of rawDeals) {
+      const pipelineId = raw.attributes?.["pipeline"];
+      // Nur Deals der Ziel-Pipeline.
+      if (pipeline && pipelineId && pipelineId !== pipeline.pipeline) continue;
+
+      const stageLabel = stageIdToLabel.get(String(raw.attributes?.["deal_stage"] ?? ""));
+      const taskCtx = summarizeTasks(tasksByDeal.get(raw.id) ?? [], cfg);
+      const contactId = raw.linkedContactsIds?.[0];
+      const contact = contactId ? await this.client.getContact(contactId) : undefined;
+
+      deals.push(mapBrevoDeal(raw, contact, taskCtx, cfg, stageLabel));
+    }
+
+    return applyFilter(deals, filter);
   }
 }
 

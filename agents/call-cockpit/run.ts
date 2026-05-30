@@ -9,7 +9,7 @@ import { enrichDeals } from "../../lib/spine/enrich.ts";
 import { prioritize } from "../../lib/prioritization/index.ts";
 import { todayIso } from "../../lib/prioritization/dates.ts";
 import type { CockpitView } from "../../lib/teams/message.ts";
-import { deliverToFiles } from "./deliver.ts";
+import { deliverToFiles, deliverToTeams } from "./deliver.ts";
 
 function parseArgs(argv: string[]): { today: string } {
   let today = todayIso();
@@ -46,6 +46,19 @@ async function main(): Promise<void> {
   console.log(`Artefakte geschrieben:`);
   console.log(`  Markdown:      ${result.markdownPath}`);
   console.log(`  Adaptive Card: ${result.cardPath}`);
+
+  // Echte Teams-Zustellung, wenn TEAMS_WEBHOOK_URL gesetzt ist.
+  try {
+    const sent = await deliverToTeams(view);
+    console.log(
+      sent
+        ? "  Teams:         zugestellt (Incoming Webhook)"
+        : "  Teams:         uebersprungen (TEAMS_WEBHOOK_URL nicht gesetzt)",
+    );
+  } catch (err) {
+    console.error("  Teams:         FEHLGESCHLAGEN -", (err as Error).message);
+  }
+
   console.log(
     `Quelle: ${getDealsSource().name} | Worklist-Eintraege: ${view.items.length}`,
   );

@@ -1,0 +1,50 @@
+name: Call-Cockpit Tagesnachricht
+
+# Taeglicher Trigger fuer die priorisierte Anruf-Worklist (Daniel / Bayern).
+# Werktags 05:00 UTC (~06:00/07:00 Berlin). Zusaetzlich manuell ausloesbar.
+on:
+  schedule:
+    - cron: "0 5 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      today:
+        description: "Stichtag (YYYY-MM-DD), leer = heute"
+        required: false
+        default: ""
+
+jobs:
+  cockpit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Cockpit erzeugen + zustellen
+        env:
+          # Quelle: "brevo" sobald Key/AVV bereit, sonst "mock" (Default).
+          DEALS_SOURCE: ${{ secrets.DEALS_SOURCE || 'mock' }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          CONTACT_UID_PEPPER: ${{ secrets.CONTACT_UID_PEPPER }}
+        run: |
+          if [ -n "${{ github.event.inputs.today }}" ]; then
+            npm run cockpit -- --today=${{ github.event.inputs.today }}
+          else
+            npm run cockpit
+          fi
+
+      - name: Artefakt hochladen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: call-cockpit
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 14
