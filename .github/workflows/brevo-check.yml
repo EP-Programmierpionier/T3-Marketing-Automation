@@ -1,0 +1,22 @@
+name: Brevo-Verbindungs-Check (PII-frei)
+
+# Manueller Check: liest nur Pipelines + Stage-Namen (keine Deals/Kontakte).
+# Bestaetigt Key/Erreichbarkeit und gleicht Stage-Labels gegen die Config ab.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - name: Pipeline-Check
+        run: npm run brevo:check
