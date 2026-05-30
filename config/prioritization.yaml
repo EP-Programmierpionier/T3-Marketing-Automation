@@ -1,0 +1,44 @@
+# Gewichte fuer die Call-Cockpit-Priorisierung (Projekt-Brief Section 10).
+# Die Logik ist eine tiered/lexikographische Ordnung, abgebildet als EIN
+# sortierbarer Score (grosse Tier-Abstaende > interne Komponenten).
+# Reihenfolge laut Brief:
+#   1. Ueberfaellige Next-Actions zuerst
+#   2. Close-Queue (offene Angebote, EUR-gewichtet)
+#   3. Reach-out-Queue (ICP-Fit + Webinar-Aktualitaet)
+#   4. Daten-Chase (Wartezeit)
+#   5. Kapazitaets-Hinweis (bei vollem BAFA-Slot GEKO/GEKO-light bevorzugen)
+
+weights:
+  # Tier 1: Ueberfaellige immer oben (additiver Block, > alle Queue-Gewichte).
+  overdue_tier: 1000000
+  # Feinordnung innerhalb "ueberfaellig" nach Anzahl Tage (gedeckelt).
+  overdue_day_weight: 1500
+  overdue_day_cap_days: 120
+
+  # Tier 2: Queue-Basisgewichte (Abstand > interne Komponente).
+  queue:
+    close: 400000
+    reachout: 300000
+    data_chase: 200000
+    park: 0
+
+  # Interne Komponente je Queue (0 .. internal_max).
+  internal_max: 90000
+
+  # Daten-Chase: pro Wartetag, gedeckelt auf internal_max.
+  data_chase_day_weight: 1000
+  data_chase_day_cap_days: 90
+
+  # Reach-out: Mischung ICP-Fit + Webinar-Aktualitaet.
+  reachout_icp_weight: 0.6
+  reachout_webinar_recency_weight: 0.4
+  # Webinar gilt nach so vielen Tagen als "kalt" (recency -> 0).
+  webinar_recency_window_days: 60
+
+  # Kapazitaets-Boost (Tier 5): wenn BAFA-Slot voll, GEKO/GEKO-light leicht hochziehen.
+  capacity_geko_boost: 30000
+
+# Schwelle, ab der BAFA als "ausgelastet" gilt: offene BAFA-Deals (Stages >=4)
+# >= verfuegbare Monatskapazitaet (FTE * 3,5). Dann greift capacity_geko_boost.
+capacity:
+  bafa_full_threshold_factor: 1.0

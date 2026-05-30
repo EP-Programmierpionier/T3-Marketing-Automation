@@ -1,0 +1,76 @@
+# Brevo-Pipeline "Kommunen" - Stage-Definitionen (Quelle: Projekt-Brief Section 4).
+# `key` ist der kanonische interne Bezeichner. `label` = Anzeigename in Brevo.
+# `id` (Brevo-Stage-ID) ist Phase 0 noch unbekannt -> offener Punkt 12.2.
+# `queue` steuert die Call-Cockpit-Priorisierung (Section 10):
+#   close       = offene Angebote nachtelefonieren (hoechste Prioritaet, EUR-gewichtet)
+#   reachout    = halbwarme Anruf-Kaskade
+#   data_chase  = Excel-Ruecklauf anmahnen
+#   park        = nicht aktiv anrufen (Altbestand, Warten, Termin steht, gewonnen/verloren)
+# `funnel_stage` referenziert die Soll-Kette aus Section 3 (1..7), 0 = ausserhalb.
+
+stages:
+  - key: alt
+    label: "ALT"
+    queue: park
+    funnel_stage: 0
+    is_money_stage: false
+
+  - key: neu_webinar
+    label: "Neu / Webinarteilnahme"
+    queue: reachout
+    funnel_stage: 1
+    is_money_stage: false
+
+  - key: versucht_erreichen
+    label: "Versucht zu erreichen"
+    queue: reachout
+    funnel_stage: 2
+    is_money_stage: false
+
+  - key: im_gespraech
+    label: "Im Gespräch / Mailkontakt"
+    queue: reachout
+    funnel_stage: 2
+    is_money_stage: false
+
+  - key: termin_vereinbart
+    label: "Gesprächstermin vereinbart"
+    queue: park
+    funnel_stage: 3
+    is_money_stage: true
+
+  - key: spaeter_warten
+    label: "Später / Warten"
+    queue: park
+    funnel_stage: 0
+    is_money_stage: true
+
+  - key: daten_angefragt
+    label: "Daten angefragt"
+    queue: data_chase
+    funnel_stage: 4
+    is_money_stage: false
+
+  - key: daten_erhalten
+    label: "Daten erhalten"
+    queue: park
+    funnel_stage: 5
+    is_money_stage: false
+
+  - key: angebot_versendet
+    label: "Angebot versendet"
+    queue: close
+    funnel_stage: 6
+    is_money_stage: true
+
+  - key: won
+    label: "Won"
+    queue: park
+    funnel_stage: 7
+    is_money_stage: true
+
+  - key: lost
+    label: "Lost"
+    queue: park
+    funnel_stage: 0
+    is_money_stage: false

@@ -1,0 +1,27 @@
+{
+  "name": "t3-marketing-automation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Closed-Loop Marketing-/Sales-Automation fuer Effizienzpioniere Kommunen. Erstes Artefakt: Call-Cockpit (Teams-Tagesnachricht).",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "cockpit": "tsx agents/call-cockpit/run.ts",
+    "brevo:check": "tsx tools/brevo-check.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

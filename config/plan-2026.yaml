@@ -1,0 +1,54 @@
+# Team-Jahresplanung 2026 (Quelle: Projekt-Brief Section 5, kanonisch).
+# "Paket" ist KEIN KPI - gerechnet wird in EUR je Produktlinie + Stueckzahl + FTE.
+
+ist_2025:
+  projekte: 217
+  umsatz_eur: 641597
+  durchschnitt_eur:
+    bafa: 7445
+    geko: 1486
+    isfp: 2537
+
+ziel_2026:
+  ziellinie_top_down_eur: 1028100
+  bottom_up_eur: 1160000
+  yoy_prozent: 60
+  monats_sales_plan:
+    jan_eur: 71953
+    dez_eur: 119177
+
+produktlinien:
+  bafa:
+    label: "BAFA (NWG-Bericht)"
+    durchschnitt_eur: 7445
+    umsatz_2026_eur: 655147
+    haupthebel: "Geschwindigkeit"
+    # Lieferkapazitaet: 3,5 Berichte pro FTE pro Monat -> Section 5
+    kapazitaet_berichte_pro_fte_monat: 3.5
+  geko:
+    label: "GEKO (Gebaeudekompass, mit Vor-Ort)"
+    durchschnitt_eur: 1486
+    umsatz_2026_eur: 356740
+    haupthebel: "Auftraege"
+    kapazitaet_berichte_pro_produktivtag: 2
+  geko_light:
+    label: "GEKO light (ohne Vor-Ort)"
+    durchschnitt_eur: 600
+    haupthebel: "Volumen-Variante"
+  zusatz:
+    label: "Zusatz (z.B. BEW)"
+    durchschnitt_eur: 10000
+    umsatz_2026_eur: 90000
+    fte: 0.375
+  neu:
+    label: "Neu (z.B. kommunale Netze)"
+    durchschnitt_eur: 10000
+    umsatz_2026_eur: 60000
+    fte: 0.4
+
+# Kapazitaet ist expliziter Plan-Treiber (zweiter Engpass) - Section 5.
+# BAFA-Stueckzahl folgt der FTE-Kapazitaet, nicht der Nachfrage.
+fte_gesamt:
+  ist_2025: 3.9
+  h1_2026: 4.7
+  h2_2026: 5.7   # +1 EEE-Hire ab Juli 2026

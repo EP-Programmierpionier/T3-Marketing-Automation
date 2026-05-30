@@ -1,0 +1,51 @@
+# Mapping Brevo-Deals-API -> kanonisches Deal-Modell (loest offenen Punkt 12.2).
+# WICHTIG: Die genauen Brevo-Stage-IDs und Custom-Field-Namen muessen vom Team
+# bestaetigt werden. Bis dahin sind hier die NAMEN (Labels) gemappt; der Adapter
+# (mcp/brevo/rest.ts) loest Stage-Labels -> StageKey ueber die Pipeline-Details
+# der Brevo-API auf, sodass keine harte ID noetig ist.
+
+# Pipeline-Auswahl: per Name (empfohlen, robust) oder per ID. Name "Kommunen".
+pipeline_name: "Kommunen"
+pipeline_id: ""        # optional; falls gesetzt, hat ID Vorrang vor Name
+
+# Brevo-Stage-Label (genau wie im Board) -> kanonischer StageKey (config/stages.yaml).
+stage_label_to_key:
+  "ALT": alt
+  "Neu / Webinarteilnahme": neu_webinar
+  "Versucht zu erreichen": versucht_erreichen
+  "Im Gespräch / Mailkontakt": im_gespraech
+  "Gesprächstermin vereinbart": termin_vereinbart
+  "Später / Warten": spaeter_warten
+  "Daten angefragt": daten_angefragt
+  "Daten erhalten": daten_erhalten
+  "Angebot versendet": angebot_versendet
+  "Won": won
+  "Lost": lost
+
+# Brevo-Deal-Attribut-Namen -> unsere Felder.
+# "amount" ist das Brevo-Standardfeld fuer den Deal-Betrag.
+# Die uebrigen sind Custom Attributes -> Namen vom Team bestaetigen lassen (12.2).
+attributes:
+  revenue_eur: "amount"
+  kommune: "kommune"
+  bundesland: "bundesland"
+  einwohner: "einwohner"
+  persona: "persona"
+  produktlinie: "produktlinie"
+  n_bafa: "n_bafa"
+  n_geko: "n_geko"
+  n_geko_light: "n_geko_light"
+  webinar_date: "webinar_date"
+  consent_state: "consent_state"
+
+# Brevo-CRM-Task-Typ (Name) -> Next-Action-Kind. Faelligkeit/last_activity
+# kommen aus den verknuepften Tasks (offene Tasks => due_date/next_action).
+task_type_to_action:
+  "Call": call
+  "Anruf": call
+  "Meeting": meeting
+  "Termin": meeting
+  "Email": email
+  "E-Mail": email
+  "To-Do": todo
+  "Aufgabe": todo
