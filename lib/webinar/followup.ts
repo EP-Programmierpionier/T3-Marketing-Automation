@@ -7,10 +7,7 @@ import type { FollowupPlan, LumaEvent, LumaRegistration } from "./types.ts";
 import type { RawLead } from "../lead-router/types.ts";
 import { routeLead } from "../lead-router/route.ts";
 import { assertClean } from "../texting/guardrails.ts";
-
-// Outlook-Bookings "Expertengespraech" (Projekt-Brief Section 2).
-const BOOKING_URL =
-  "https://outlook.office.com/book/BuchungDanielSchfers@effizienzpioniere.de/s/tLEvRsaxNEqePM70_IbX5A2";
+import { BOOKING_URL } from "../links.ts";
 
 function toLead(reg: LumaRegistration, event: LumaEvent): RawLead {
   return {

@@ -1,0 +1,38 @@
+# Kuratierte Gesetzes-/Foerderfenster fuer Newsletter + Einladungen (Blueprint
+# Section 3C). KEINE generischen Branchen-News. Trigger-Reihenfolge je Thema:
+# Pflicht-Bindung -> Frist -> Konsequenz -> Foerderhebel -> Klima (Bonus).
+# Texte muessen die texting-guardrails passieren (kein FOMO, kein ROI/Sparen,
+# Bauamt nicht klima-only). Stand-Werte sind Platzhalter -> vor Versand pruefen.
+
+themen:
+  - key: kwp
+    name: "Kommunale Waermeplanung (KWP)"
+    pflicht: "gesetzliche Waermeplanungs-Pflicht fuer Kommunen"
+    frist: "gestaffelte Fristen je Gemeindegroesse"
+    konsequenz: "ohne Planung keine belastbare Grundlage fuer Foerderung und Investitionen"
+    foerder: "Foerderung der Planung und Umsetzungsschritte"
+    personas: [klima_energiemanager, buergermeister, kaemmerei]
+
+  - key: gmodg
+    name: "Gebaeude-Modernisierungsgesetz / GEG-Kontext"
+    pflicht: "Anforderungen an kommunale Liegenschaften (GEG/GModG)"
+    frist: "stufenweise Pflichten in den naechsten Jahren"
+    konsequenz: "Substanzverlust und Nachruestkosten bei Verzoegerung"
+    foerder: "Foerderung fuer Sanierungsfahrplan und Massnahmen"
+    personas: [bauamt, kaemmerei]
+
+  - key: bafa_nwg
+    name: "BAFA-Bundesfoerderung (Nichtwohngebaeude)"
+    pflicht: "Pflicht- und Sanierungsbedarf kommunaler Nichtwohngebaeude"
+    frist: "Foerderfenster mit begrenzter Laufzeit"
+    konsequenz: "ungenutzte Foerderquote belastet den Eigenanteil"
+    foerder: "hohe Foerderquote bei rechtzeitiger Antragstellung"
+    personas: [klima_energiemanager, kaemmerei, bauamt]
+
+  - key: bew
+    name: "Bundesfoerderung effiziente Waermenetze (BEW)"
+    pflicht: "Aufbau/Transformation kommunaler Waermenetze"
+    frist: "Antrags- und Umsetzungsfenster beachten"
+    konsequenz: "verspaetete Planung verzoegert Netzausbau und Foerderung"
+    foerder: "Foerderung von Machbarkeit bis Umsetzung"
+    personas: [klima_energiemanager, buergermeister]

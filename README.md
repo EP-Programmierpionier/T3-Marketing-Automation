@@ -19,7 +19,8 @@ npm run pacing           # Conversion-Analyst: Pacing-Report (Ist vs Plan)
 npm run webinar          # Webinar-Orchestrator: Sync + Einladung + Follow-up
 npm run kam              # KAM-Manager: Folgeauftrags-KPIs (NRR) + Worklist
 npm run pipeline-sync    # Pipeline-Sync: Explorer <-> Brevo Abgleich
-npm test                 # Unit- + Integrationstests (68)
+npm run copy             # Campaign-Copywriter: Hypothesen + A/B-Newsletter-Copy
+npm test                 # Unit- + Integrationstests (73)
 npm run typecheck        # strikter TypeScript-Check
 ```
 
@@ -52,11 +53,14 @@ tunebar in `config/prioritization.yaml`.
 /agents/webinar-orchestrator run.ts (LUMA-Sync + Einladung BW/BY + Follow-up)
 /agents/kam-manager    run.ts (Folgeauftrags-KPIs + KAM-Worklist)
 /agents/pipeline-sync  run.ts (Explorer <-> Brevo Money-Stage-Abgleich)
+/agents/campaign-copywriter run.ts (Closed-Loop: Hypothesen + A/B-Copy)
 /lib/lead-router       normalize.ts · route.ts · notify.ts · types.ts
 /lib/pacing            analyze.ts · report.ts · plan.ts
 /lib/webinar           select.ts · invite.ts · followup.ts · types.ts
 /lib/kam               metrics.ts · worklist.ts · types.ts
 /lib/pipeline-sync     reconcile.ts
+/lib/copy              newsletter.ts · hypotheses.ts · types.ts
+/lib/links.ts          Booking-URL + UTM-Helfer (geteilt)
 /mcp/luma              adapter.ts (Mock + REST-Stub, gated)
 /mcp/projekt-explorer  adapter.ts (Mock + REST-Stub, gated §12.4)
 /mcp/brevo             adapter.ts (Lese: Mock+REST) · sink.ts (Schreib: Mock+REST) · rest.ts · mapping.ts
@@ -106,7 +110,21 @@ Archetyp-Weiche, mock-first; CRM-Write hinter Sink-Interface) →
 4. **Webinar-Orchestrator** ✅ (LUMA-Sync + segmentierte Einladung BW/BY +
 Teilnehmer-/No-Show-Follow-up) → 5. **Pipeline-Sync + KAM** ✅ → 6. **Conversion-Analyst** ✅
 (Pacing: Ist-vs-Plan €/Produktlinie, Funnel-Drift, FTE-Kapazität, zwei Uhren,
-Segmentierung BW/BY + Persona) → 7. PostHog-Stitching → 8. Closed-Loop-Copy.
+Segmentierung BW/BY + Persona) → 7. PostHog-Stitching ⬜ (hinter Consent, §9) →
+8. **Closed-Loop-Copy** ✅ (Campaign-Copywriter: Hypothesen aus Pacing + A/B-Newsletter).
+
+> 7 von 8 Schritten stehen. **Schritt 7 (PostHog-Stitching)** ist bewusst offen —
+> er setzt das Consent-Banner (Phase 2, §9) voraus und wird erst danach gebaut.
+
+### Closed-Loop-Copy (Schritt 8)
+
+`npm run copy` schließt den Loop (§3F): leitet aus dem Pacing-Report
+**testbare Hypothesen** ab (z. B. Daten-Stau → Reminder-Variante, Pacing < Plan →
+Direkt-Termin-CTA) und erzeugt persona-segmentierte **Newsletter-A/B-Varianten**
+(`pflicht_first` vs `foerder_first`) zu kuratierten Themen (`config/themen-2026.yaml`).
+Alle Texte guardrail-geprüft (kein FOMO/ROI/Sparen, Bauamt nicht klima-only),
+Primär-CTA = Outlook-Booking-Link + UTM. Volltexte je Variante in `out/copy-<datum>.json`.
+Das Messen der Leading-Signale je Variante folgt mit PostHog/Brevo-Events (Schritt 7).
 
 ### Webinar-Orchestrator (Schritt 4)
 
