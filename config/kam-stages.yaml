@@ -1,0 +1,10 @@
+# KAM-Pipeline (Key-Account-Management / Folgeauftraege) - Blueprint Section 8.2b.
+# Zweite Umsatz-Motion 2026: Bestandskunden "ueber die ganze Strecke" begleiten.
+# Eigene Stages + eigene KPIs (NRR, Folgeauftrags-Quote je begleiteter Kommune).
+
+stages:
+  - { key: bestandskunde,       label: "Bestandskunde",         kind: park,  is_won: false }
+  - { key: folgebedarf_erkannt, label: "Folgebedarf erkannt",   kind: work,  is_won: false }
+  - { key: folgeangebot,        label: "Folgeangebot versendet", kind: close, is_won: false }
+  - { key: folgeauftrag,        label: "Folgeauftrag (Won)",    kind: won,   is_won: true }
+  - { key: kein_folgebedarf,    label: "Kein Folgebedarf",      kind: lost,  is_won: false }
