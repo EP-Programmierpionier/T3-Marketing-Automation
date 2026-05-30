@@ -15,7 +15,8 @@ npm install
 npm run cockpit          # Call-Cockpit-Tagesnachricht aus test/mock-deals.json
 npm run cockpit -- --today=2026-05-30   # mit festem Stichtag (reproduzierbar)
 npm run lead-router      # Lead-Router gegen test/sample-leads.json
-npm test                 # Unit- + Integrationstests (41)
+npm run pacing           # Conversion-Analyst: Pacing-Report (Ist vs Plan)
+npm test                 # Unit- + Integrationstests (50)
 npm run typecheck        # strikter TypeScript-Check
 ```
 
@@ -44,7 +45,9 @@ tunebar in `config/prioritization.yaml`.
 ```
 /agents/call-cockpit   run.ts (Agent) + deliver.ts (Teams/Datei)
 /agents/lead-router    run.ts (usebasin/LUMA -> Brevo, Archetyp-Weiche BW/BY)
+/agents/conversion-analyst  run.ts (Pacing-Report: Ist vs Plan, zwei Uhren)
 /lib/lead-router       normalize.ts · route.ts · notify.ts · types.ts
+/lib/pacing            analyze.ts · report.ts · plan.ts
 /mcp/brevo             adapter.ts (Lese: Mock+REST) · sink.ts (Schreib: Mock+REST) · rest.ts · mapping.ts
 /mcp/luma,/mcp/posthog Platzhalter (spätere Roadmap-Schritte)
 /skills                texting-guardrails/ · persona-classify/ · attribution-model/
@@ -89,8 +92,19 @@ Der Code ist **plug-and-play live-fähig**. Drei Schalter, alle über ENV/Secret
 1. Brevo-Adapter + Spine ✅ → 2. **Call-Cockpit** ✅ (live-fähig: Brevo-REST +
 Teams-Webhook + Tages-Trigger) → 3. **Lead-Router** ✅ (usebasin/LUMA → Brevo,
 Archetyp-Weiche, mock-first; CRM-Write hinter Sink-Interface) →
-4. Webinar-Orchestrator → 5. Pipeline-Sync + KAM → 6. Conversion-Analyst (Pacing)
-→ 7. PostHog-Stitching → 8. Closed-Loop-Copy.
+4. Webinar-Orchestrator → 5. Pipeline-Sync + KAM → 6. **Conversion-Analyst** ✅
+(Pacing: Ist-vs-Plan €/Produktlinie, Funnel-Drift, FTE-Kapazität, zwei Uhren,
+Segmentierung BW/BY + Persona) → 7. PostHog-Stitching → 8. Closed-Loop-Copy.
+
+### Conversion-Analyst (Schritt 6)
+
+`npm run pacing` liest die gesamte Pipeline und erzeugt einen Markdown-Report
+(`out/pacing-<datum>.md` + JSON): **zwei Uhren** (Lagging = Won vs Monatsplan §5;
+Leading = überfällige Actions, Reach-out-Backlog, Daten-Stau, Tagesquote,
+Kapazitäts-Klippe), **Funnel-Soll-vs-Ist** (BY, §3-Kette), **€ je Produktlinie**
+(Ist vs Plan/Monat), **FTE-Kapazität** (BAFA 3,5/FTE, GEKO 2/Tag) und
+**Segmentierung** (BW/BY-Split aus Ist + Persona). Won-Monatszuordnung braucht
+das Abschluss-Datum (Phase 1, §12.4 Projekt-Explorer).
 
 ### Lead-Router (Schritt 3)
 

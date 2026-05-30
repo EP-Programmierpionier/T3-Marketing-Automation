@@ -53,12 +53,20 @@ export interface FunnelSollConfig {
 }
 
 export interface PlanConfig {
+  ist_2025?: { projekte: number; umsatz_eur: number };
+  ziel_2026?: {
+    ziellinie_top_down_eur: number;
+    bottom_up_eur: number;
+    monats_sales_plan: { jan_eur: number; dez_eur: number };
+  };
   produktlinien: Record<
     string,
     {
       label: string;
       durchschnitt_eur: number;
+      umsatz_2026_eur?: number;
       kapazitaet_berichte_pro_fte_monat?: number;
+      kapazitaet_berichte_pro_produktivtag?: number;
     }
   >;
   fte_gesamt: { ist_2025: number; h1_2026: number; h2_2026: number };
