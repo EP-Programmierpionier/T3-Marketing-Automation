@@ -1,0 +1,41 @@
+# Soll-Funnel und Aktivitaets-Quoten (Quelle: Projekt-Brief Section 3).
+# Zwei Geografie-Archetypen. Das Call-Cockpit v1 bedient ausschliesslich BY (Daniel).
+
+archetypes:
+  bw:
+    name: "BW - Webinar-Inbound (Jonas)"
+    mechanik: "warmes Webinar -> direkte Buchung/Beauftragung, Anrufebene uebersprungen"
+    call_cockpit: false   # keine Anrufliste fuer BW
+  by:
+    name: "BY - Proaktiv-Call (Daniel)"
+    mechanik: "Webinar/Brevo-Kontakt -> halbwarme Anruf-Kaskade -> Termin -> ..."
+    call_cockpit: true
+
+# Quantifizierter BY-Anruf-Funnel (Soll, pro Monat) - Section 3.
+by_funnel_soll:
+  - stage: 1
+    name: "Deal aus Webinar (anzurufen)"
+    pro_monat: 96
+  - stage: 2
+    name: "Halbwarmer Anruf m. Ansprechpartner gefuehrt"
+    pro_monat: 32
+  - stage: 3
+    name: "Verkaufsgespraech (Teams + Slidedeck)"
+    pro_monat: 24
+  - stage: 4
+    name: "Datenabfrage versendet"
+    pro_monat: 12
+  - stage: 5
+    name: "Daten erhalten"
+    pro_monat: 4
+  - stage: 6
+    name: "Angebot versendet"
+    pro_monat: 4
+  - stage: 7
+    name: "Pakete beauftragt (Won)"
+    pro_monat: 2
+
+# Taegliche Aktivitaets-Quoten (Section 3) - werden im Cockpit-Header gespiegelt.
+tagesquote:
+  min_anrufe_pro_tag: 2
+  min_gespraeche_pro_tag: 1
