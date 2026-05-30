@@ -1,0 +1,6 @@
+[
+  { "deal_id": "D-1001", "kommune": "Bietigheim-Bissingen", "status": "angenommen", "betrag_eur": 14900, "datum": "2026-05-22" },
+  { "deal_id": "D-1002", "kommune": "Guenzburg", "status": "geschrieben", "betrag_eur": 8000, "datum": "2026-04-02" },
+  { "deal_id": "D-1004", "kommune": "Neusaess", "status": "geschrieben", "betrag_eur": 22000, "datum": "2026-05-10" },
+  { "deal_id": "D-8888", "kommune": "Roth", "status": "angenommen", "betrag_eur": 12500, "datum": "2026-05-18" }
+]

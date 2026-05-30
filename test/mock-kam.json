@@ -1,0 +1,89 @@
+[
+  {
+    "id": "K-1001",
+    "kommune": "Aichach",
+    "bundesland": "BY",
+    "owner": "KAM",
+    "stage": "folgeauftrag",
+    "base_revenue_eur": 23000,
+    "folge_revenue_eur": 14900,
+    "produktlinie": "bafa",
+    "persona": "klima_energiemanager",
+    "last_activity": "2026-05-15"
+  },
+  {
+    "id": "K-1002",
+    "kommune": "Bietigheim-Bissingen",
+    "bundesland": "BW",
+    "owner": "KAM",
+    "stage": "folgeangebot",
+    "base_revenue_eur": 46488,
+    "folge_revenue_eur": 22000,
+    "produktlinie": "bafa",
+    "persona": "klima_energiemanager",
+    "next_action": "call",
+    "due_date": "2026-05-20",
+    "last_activity": "2026-05-12"
+  },
+  {
+    "id": "K-1003",
+    "kommune": "Schwabach",
+    "bundesland": "BY",
+    "owner": "KAM",
+    "stage": "folgebedarf_erkannt",
+    "base_revenue_eur": 18000,
+    "folge_revenue_eur": 12000,
+    "produktlinie": "geko",
+    "persona": "kaemmerei",
+    "next_action": "todo",
+    "due_date": "2026-04-10",
+    "last_activity": "2026-03-28"
+  },
+  {
+    "id": "K-1004",
+    "kommune": "Memmingen",
+    "bundesland": "BY",
+    "owner": "KAM",
+    "stage": "folgebedarf_erkannt",
+    "base_revenue_eur": 9000,
+    "folge_revenue_eur": 7000,
+    "produktlinie": "geko",
+    "persona": "klima_energiemanager",
+    "last_activity": "2026-05-18"
+  },
+  {
+    "id": "K-1005",
+    "kommune": "Dachau",
+    "bundesland": "BY",
+    "owner": "KAM",
+    "stage": "bestandskunde",
+    "base_revenue_eur": 15000,
+    "folge_revenue_eur": 0,
+    "produktlinie": "bafa",
+    "persona": "klima_energiemanager",
+    "last_activity": "2026-02-10"
+  },
+  {
+    "id": "K-1006",
+    "kommune": "Leonberg",
+    "bundesland": "BW",
+    "owner": "KAM",
+    "stage": "folgeauftrag",
+    "base_revenue_eur": 30000,
+    "folge_revenue_eur": 9000,
+    "produktlinie": "zusatz",
+    "persona": "bauamt",
+    "last_activity": "2026-05-05"
+  },
+  {
+    "id": "K-1007",
+    "kommune": "Kempten",
+    "bundesland": "BY",
+    "owner": "KAM",
+    "stage": "kein_folgebedarf",
+    "base_revenue_eur": 8000,
+    "folge_revenue_eur": 0,
+    "persona": "bauamt",
+    "last_activity": "2026-01-20"
+  }
+]

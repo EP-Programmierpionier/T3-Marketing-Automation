@@ -80,11 +80,22 @@ export interface BrevoMappingConfig {
   task_type_to_action: Record<string, NextActionKind>;
 }
 
+export interface KamStageDef {
+  key: string;
+  label: string;
+  kind: "park" | "work" | "close" | "won" | "lost";
+  is_won: boolean;
+}
+export interface KamStagesConfig {
+  stages: KamStageDef[];
+}
+
 let _stages: StagesConfig | undefined;
 let _prio: PrioritizationConfig | undefined;
 let _funnel: FunnelSollConfig | undefined;
 let _plan: PlanConfig | undefined;
 let _brevo: BrevoMappingConfig | undefined;
+let _kam: KamStagesConfig | undefined;
 
 export function getStagesConfig(): StagesConfig {
   return (_stages ??= loadYaml<StagesConfig>("stages.yaml"));
@@ -104,6 +115,10 @@ export function getPlanConfig(): PlanConfig {
 
 export function getBrevoMappingConfig(): BrevoMappingConfig {
   return (_brevo ??= loadYaml<BrevoMappingConfig>("brevo-mapping.yaml"));
+}
+
+export function getKamStagesConfig(): KamStagesConfig {
+  return (_kam ??= loadYaml<KamStagesConfig>("kam-stages.yaml"));
 }
 
 /** Lookup-Map StageKey -> StageDef. */
