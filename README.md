@@ -12,9 +12,10 @@ Quellen der Wahrheit: `PROJEKT_BRIEF_MARKETING_AUTOMATION.md`,
 
 ```bash
 npm install
-npm run cockpit          # erzeugt die Tagesnachricht aus test/mock-deals.json
+npm run cockpit          # Call-Cockpit-Tagesnachricht aus test/mock-deals.json
 npm run cockpit -- --today=2026-05-30   # mit festem Stichtag (reproduzierbar)
-npm test                 # Unit- + Integrationstests (31)
+npm run lead-router      # Lead-Router gegen test/sample-leads.json
+npm test                 # Unit- + Integrationstests (41)
 npm run typecheck        # strikter TypeScript-Check
 ```
 
@@ -42,14 +43,16 @@ tunebar in `config/prioritization.yaml`.
 
 ```
 /agents/call-cockpit   run.ts (Agent) + deliver.ts (Teams/Datei)
-/mcp/brevo             adapter.ts (Mock + echter REST-Adapter) · rest.ts · mapping.ts
+/agents/lead-router    run.ts (usebasin/LUMA -> Brevo, Archetyp-Weiche BW/BY)
+/lib/lead-router       normalize.ts · route.ts · notify.ts · types.ts
+/mcp/brevo             adapter.ts (Lese: Mock+REST) · sink.ts (Schreib: Mock+REST) · rest.ts · mapping.ts
 /mcp/luma,/mcp/posthog Platzhalter (spätere Roadmap-Schritte)
 /skills                texting-guardrails/ · persona-classify/ · attribution-model/
 /lib/spine             contact_uid + Anreicherung (Persona, ICP-Fit)
 /lib/prioritization    Scoring + Kapazität + Datums-Helfer
 /lib/texting           guardrails.ts (Lint) + opener.ts (Aufhänger)
 /lib/teams             message.ts (Markdown + Adaptive Card)
-/config                plan-2026.yaml · funnel-soll.yaml · stages.yaml · prioritization.yaml · brevo-mapping.yaml
+/config                plan-2026.yaml · funnel-soll.yaml · stages.yaml · prioritization.yaml · brevo-mapping.yaml · gemeinden.yaml
 /knowledge             persona-trigger.md · zielgruppe.md · goldene-regeln-11.md
 /test                  mock-deals.json + Tests
 ```
@@ -84,6 +87,17 @@ Der Code ist **plug-and-play live-fähig**. Drei Schalter, alle über ENV/Secret
 ## Roadmap (Wert-zuerst, §11)
 
 1. Brevo-Adapter + Spine ✅ → 2. **Call-Cockpit** ✅ (live-fähig: Brevo-REST +
-Teams-Webhook + Tages-Trigger) → 3. Lead-Router → 4. Webinar-Orchestrator →
-5. Pipeline-Sync + KAM → 6. Conversion-Analyst (Pacing) → 7. PostHog-Stitching →
-8. Closed-Loop-Copy.
+Teams-Webhook + Tages-Trigger) → 3. **Lead-Router** ✅ (usebasin/LUMA → Brevo,
+Archetyp-Weiche, mock-first; CRM-Write hinter Sink-Interface) →
+4. Webinar-Orchestrator → 5. Pipeline-Sync + KAM → 6. Conversion-Analyst (Pacing)
+→ 7. PostHog-Stitching → 8. Closed-Loop-Copy.
+
+### Lead-Router (Schritt 3)
+
+usebasin-Form / LUMA-Registrierung → normalisieren (Honeypot-Spamschutz) →
+Spine-Anreicherung (Persona, Gemeinde→Bundesland/EW via `config/gemeinden.yaml`,
+ICP-Fit) → **Archetyp-Weiche**: BY → Daniel + Call-Cockpit, BW → Jonas
+(Webinar-Inbound, keine Anrufliste), unbekannte Geo → „GEO PRÜFEN". Dazu eine
+§11-konforme Sales-Benachrichtigung. Schreibseite (`mcp/brevo/sink.ts`) Mock
+(Phase 0) bzw. `LEAD_SINK=brevo` (Phase 1, CRM-Write gated bis Feldnamen + AVV
+bestätigt). Webhook-Anbindung (usebasin/LUMA) = Live-Schritt.

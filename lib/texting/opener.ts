@@ -30,8 +30,14 @@ const PERSONA_PROOF: Record<Persona, string> = {
     "konkrete Eigenanteils-Zahlen und Foerdermitnahme",
 };
 
-function stageOpener(deal: EnrichedDeal, queue: Queue, hook: string, proof: string): string {
-  const k = deal.kommune;
+/** Minimaler Kontext, den ein Aufhaenger braucht (Deal-unabhaengig). */
+export interface OpenerContext {
+  kommune: string;
+  persona: Persona;
+}
+
+function stageOpener(ctx: OpenerContext, queue: Queue, hook: string, proof: string): string {
+  const k = ctx.kommune;
   switch (queue) {
     case "close":
       // Offenes Angebot nachtelefonieren - Bezug aufs konkrete Angebot.
@@ -59,12 +65,18 @@ function stageOpener(deal: EnrichedDeal, queue: Queue, hook: string, proof: stri
 }
 
 /**
- * Baut den finalen Aufhaenger und garantiert Guardrail-Konformitaet.
+ * Baut den finalen Aufhaenger fuer einen beliebigen Kontext und garantiert
+ * Guardrail-Konformitaet. Basis fuer Cockpit und Lead-Router.
  */
-export function generateOpener(deal: EnrichedDeal, queue: Queue): string {
-  const hook = PERSONA_HOOK[deal.persona];
-  const proof = PERSONA_PROOF[deal.persona];
-  const text = stageOpener(deal, queue, hook, proof);
-  assertClean(text, `opener(${deal.id}/${deal.persona}/${queue})`);
+export function generateOpenerFor(ctx: OpenerContext, queue: Queue): string {
+  const hook = PERSONA_HOOK[ctx.persona];
+  const proof = PERSONA_PROOF[ctx.persona];
+  const text = stageOpener(ctx, queue, hook, proof);
+  assertClean(text, `opener(${ctx.kommune}/${ctx.persona}/${queue})`);
   return text;
+}
+
+/** Aufhaenger fuer einen angereicherten Deal (Cockpit). */
+export function generateOpener(deal: EnrichedDeal, queue: Queue): string {
+  return generateOpenerFor({ kommune: deal.kommune, persona: deal.persona }, queue);
 }

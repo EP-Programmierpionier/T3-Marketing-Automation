@@ -1,0 +1,60 @@
+[
+  {
+    "source": "usebasin",
+    "payload": {
+      "name": "Andrea Sommer",
+      "funktion": "Energiemanagerin",
+      "kommune": "Kaufbeuren",
+      "email": "a.sommer@kaufbeuren.example",
+      "nachricht": "Wir muessen unsere kommunale Waermeplanung angehen und brauchen Unterstuetzung bei der Foerderung.",
+      "_gotcha": ""
+    }
+  },
+  {
+    "source": "luma",
+    "payload": {
+      "name": "Markus Lehner",
+      "email": "m.lehner@gersthofen.example",
+      "answers": {
+        "anrede": "Herr",
+        "kommune": "Gersthofen",
+        "funktion": "Sachbearbeiter Hochbau"
+      },
+      "event": {
+        "id": "evt_123",
+        "name": "Kommunale Waermeplanung - Foerderung 2026",
+        "start_at": "2026-06-12T16:00:00Z"
+      }
+    }
+  },
+  {
+    "source": "usebasin",
+    "payload": {
+      "name": "Karl Schuster",
+      "funktion": "Bauamtsleiter",
+      "kommune": "Ravensburg",
+      "email": "k.schuster@ravensburg.example",
+      "nachricht": "Interesse an einem Sanierungsfahrplan fuer unsere Liegenschaften.",
+      "_gotcha": ""
+    }
+  },
+  {
+    "source": "usebasin",
+    "payload": {
+      "name": "Spam Bot",
+      "kommune": "Irgendwo",
+      "email": "bot@spam.example",
+      "_gotcha": "ich-bin-ein-bot"
+    }
+  },
+  {
+    "source": "usebasin",
+    "payload": {
+      "name": "Petra Klein",
+      "funktion": "Klimaschutzmanagerin",
+      "kommune": "Kleinkleckersdorf",
+      "email": "p.klein@kleinkleckersdorf.example",
+      "_gotcha": ""
+    }
+  }
+]

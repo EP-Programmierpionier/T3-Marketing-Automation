@@ -1,0 +1,33 @@
+# Gemeinde-Lookup: Kommune -> Bundesland + Einwohner (fuer Lead-Router-Anreicherung).
+# Quelle der Wahrheit fuer den Vollbestand: amtliches Gemeindeverzeichnis (Destatis,
+# AGS) - hier nur ein SEED fuer Demo/Tests. TODO (Phase 1): vollstaendigen
+# BW+BY-Auszug laden (z.B. via Destatis-CSV) und diesen Seed ersetzen.
+# Schluessel werden normalisiert (lowercase, ohne Umlaut-Varianten) gematcht.
+
+gemeinden:
+  # Bayern (Archetyp BY / Daniel)
+  - { name: "Friedberg", bundesland: BY, einwohner: 30000 }
+  - { name: "Gersthofen", bundesland: BY, einwohner: 22000 }
+  - { name: "Senden", bundesland: BY, einwohner: 22500 }
+  - { name: "Kaufbeuren", bundesland: BY, einwohner: 45000 }
+  - { name: "Lindau", bundesland: BY, einwohner: 25000 }
+  - { name: "Memmingen", bundesland: BY, einwohner: 44000 }
+  - { name: "Dachau", bundesland: BY, einwohner: 48000 }
+  - { name: "Olching", bundesland: BY, einwohner: 28000 }
+  - { name: "Puchheim", bundesland: BY, einwohner: 22000 }
+  - { name: "Fuerstenfeldbruck", bundesland: BY, einwohner: 37000 }
+  - { name: "Guenzburg", bundesland: BY, einwohner: 21000 }
+  - { name: "Schwabach", bundesland: BY, einwohner: 41000 }
+  - { name: "Neusaess", bundesland: BY, einwohner: 22000 }
+  - { name: "Germering", bundesland: BY, einwohner: 41000 }
+  - { name: "Unterschleissheim", bundesland: BY, einwohner: 29000 }
+  - { name: "Aichach", bundesland: BY, einwohner: 21000 }
+  - { name: "Vaterstetten", bundesland: BY, einwohner: 24000 }
+
+  # Baden-Wuerttemberg (Archetyp BW / Jonas)
+  - { name: "Bietigheim-Bissingen", bundesland: BW, einwohner: 43000 }
+  - { name: "Tuebingen", bundesland: BW, einwohner: 91000 }
+  - { name: "Ravensburg", bundesland: BW, einwohner: 51000 }
+  - { name: "Leonberg", bundesland: BW, einwohner: 49000 }
+  - { name: "Nuertingen", bundesland: BW, einwohner: 42000 }
+  - { name: "Backnang", bundesland: BW, einwohner: 39000 }
