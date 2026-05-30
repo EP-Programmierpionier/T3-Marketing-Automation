@@ -16,6 +16,12 @@ jobs:
   cockpit:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      # Quelle: "brevo" sobald Key/AVV bereit, sonst "mock" (Default).
+      DEALS_SOURCE: ${{ secrets.DEALS_SOURCE || 'mock' }}
+      BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      CONTACT_UID_PEPPER: ${{ secrets.CONTACT_UID_PEPPER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,12 +33,6 @@ jobs:
       - run: npm ci
 
       - name: Cockpit erzeugen + zustellen
-        env:
-          # Quelle: "brevo" sobald Key/AVV bereit, sonst "mock" (Default).
-          DEALS_SOURCE: ${{ secrets.DEALS_SOURCE || 'mock' }}
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-          CONTACT_UID_PEPPER: ${{ secrets.CONTACT_UID_PEPPER }}
         run: |
           if [ -n "${{ github.event.inputs.today }}" ]; then
             npm run cockpit -- --today=${{ github.event.inputs.today }}
@@ -40,8 +40,11 @@ jobs:
             npm run cockpit
           fi
 
-      - name: Artefakt hochladen
-        if: always()
+      # Artefakt NUR bei Mock-Daten hochladen. Bei Live-Betrieb (brevo) enthielte
+      # out/ personenbezogene Daten (Namen/E-Mails) -> keine Ablage in GitHub-
+      # Artefakten (DSGVO). Zustellung erfolgt dann ausschliesslich via Teams.
+      - name: Artefakt hochladen (nur Mock)
+        if: always() && env.DEALS_SOURCE != 'brevo'
         uses: actions/upload-artifact@v4
         with:
           name: call-cockpit

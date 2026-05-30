@@ -17,6 +17,6 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["agents", "lib", "mcp", "test"],
+  "include": ["agents", "lib", "mcp", "test", "tools"],
   "exclude": ["node_modules", "dist"]
 }
