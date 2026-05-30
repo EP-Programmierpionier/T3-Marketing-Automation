@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import yaml from "js-yaml";
-import type { NextActionKind, Queue, StageKey } from "./types.ts";
+import type { NextActionKind, Persona, Queue, StageKey } from "./types.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CONFIG_DIR = join(here, "..", "config");
@@ -90,12 +90,26 @@ export interface KamStagesConfig {
   stages: KamStageDef[];
 }
 
+export interface ThemaDef {
+  key: string;
+  name: string;
+  pflicht: string;
+  frist: string;
+  konsequenz: string;
+  foerder: string;
+  personas: Persona[];
+}
+export interface ThemenConfig {
+  themen: ThemaDef[];
+}
+
 let _stages: StagesConfig | undefined;
 let _prio: PrioritizationConfig | undefined;
 let _funnel: FunnelSollConfig | undefined;
 let _plan: PlanConfig | undefined;
 let _brevo: BrevoMappingConfig | undefined;
 let _kam: KamStagesConfig | undefined;
+let _themen: ThemenConfig | undefined;
 
 export function getStagesConfig(): StagesConfig {
   return (_stages ??= loadYaml<StagesConfig>("stages.yaml"));
@@ -119,6 +133,10 @@ export function getBrevoMappingConfig(): BrevoMappingConfig {
 
 export function getKamStagesConfig(): KamStagesConfig {
   return (_kam ??= loadYaml<KamStagesConfig>("kam-stages.yaml"));
+}
+
+export function getThemenConfig(): ThemenConfig {
+  return (_themen ??= loadYaml<ThemenConfig>("themen-2026.yaml"));
 }
 
 /** Lookup-Map StageKey -> StageDef. */
