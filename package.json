@@ -11,6 +11,7 @@
     "cockpit": "tsx agents/call-cockpit/run.ts",
     "lead-router": "tsx agents/lead-router/run.ts",
     "pacing": "tsx agents/conversion-analyst/run.ts",
+    "webinar": "tsx agents/webinar-orchestrator/run.ts",
     "brevo:check": "tsx tools/brevo-check.ts",
     "test": "vitest run",
     "test:watch": "vitest",
