@@ -9,6 +9,7 @@
   },
   "scripts": {
     "cockpit": "tsx agents/call-cockpit/run.ts",
+    "lead-router": "tsx agents/lead-router/run.ts",
     "brevo:check": "tsx tools/brevo-check.ts",
     "test": "vitest run",
     "test:watch": "vitest",
