@@ -1,5 +1,7 @@
 # T3 Marketing-Automation — Effizienzpioniere Kommunen
 
+[![CI](https://github.com/EP-Programmierpionier/T3-Marketing-Automation/actions/workflows/ci.yml/badge.svg)](https://github.com/EP-Programmierpionier/T3-Marketing-Automation/actions/workflows/ci.yml)
+
 Closed-Loop Marketing-/Sales-Automation im Claude-Ökosystem für die
 Energieberatung für Kommunen (BW + Bayern). **Erstes Artefakt: das
 Call-Cockpit** — eine täglich priorisierte Anruf-Worklist für Daniel (Bayern,
