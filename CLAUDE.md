@@ -107,3 +107,7 @@ erst nach Consent-Banner (Phase 2, §9)** — nicht vorziehen. CI lädt bei
 2. Teams-`TEAMS_WEBHOOK_URL` + Channel/Uhrzeit (§12.3)
 3. Projekt-Explorer-API/Export (§12.4)
 4. Consent-Banner → schaltet Schritt 7 frei
+5. **Brevo IP-Allowlist:** „Blockieren nicht autorisierter IP-Adressen" (API) ist
+   ggf. aktiv → GitHub-Actions-Runner-IPs (dynamisch, Azure) werden blockiert.
+   Lösung: feste Egress-IP autorisieren ODER IP-Blocking für den API-Key
+   deaktivieren ODER Brevo-Jobs aus Umgebung mit fester IP fahren.

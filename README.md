@@ -93,6 +93,16 @@ Der Code ist **plug-and-play live-fähig**. Drei Schalter, alle über ENV/Secret
    Custom-Field-Namen stehen zentral in `config/brevo-mapping.yaml` — **dort vom
    Team bestätigen** (offener Punkt §12.2). Secrets niemals committen; produktiv
    via Azure Key Vault.
+
+   > ⚠️ **Brevo IP-Allowlist beachten.** In Brevo (Konto → Sicherheit →
+   > „Zugelassene IPs") ist „Blockieren nicht autorisierter IP-Adressen" für
+   > API-Schlüssel ggf. **aktiviert** → Calls von nicht autorisierten IPs werden
+   > blockiert. GitHub-Actions-Runner haben **dynamische Azure-IPs** (viele, wechselnde
+   > Ranges) und sind so nicht zuverlässig allowlistbar. Vor der Live-Schaltung
+   > daher: feste Egress-IP (self-hosted Runner / NAT-Gateway / Fixed-IP-Proxy) +
+   > diese `/32` in Brevo autorisieren, **oder** IP-Blocking für den API-Schlüssel
+   > deaktivieren, **oder** die Brevo-Jobs aus einer Umgebung mit fester IP (z. B.
+   > Azure Function/Container) laufen lassen.
 2. **Teams-Zustellung:** `TEAMS_WEBHOOK_URL` setzen (Power-Automate-„Workflows"-
    Incoming-Webhook oder O365-Connector). Das Cockpit postet dann die Adaptive
    Card direkt in den Ziel-Channel/-Chat. Ohne URL fällt es sauber auf die
